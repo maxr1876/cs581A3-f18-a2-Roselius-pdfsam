@@ -45,6 +45,7 @@ import org.sejda.eventstudio.annotation.EventStation;
 import org.sejda.injector.Auto;
 import org.sejda.injector.Components;
 import org.sejda.injector.Provides;
+import org.sejda.model.exception.InvalidTaskParametersException;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;

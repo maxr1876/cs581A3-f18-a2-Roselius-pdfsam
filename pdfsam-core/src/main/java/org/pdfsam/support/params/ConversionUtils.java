@@ -21,8 +21,12 @@ package org.pdfsam.support.params;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.sejda.conversion.AdapterUtils.splitAndTrim;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.pdfsam.i18n.DefaultI18nContext;
 import org.sejda.common.collection.NullSafeSet;
@@ -45,7 +49,7 @@ public final class ConversionUtils {
     public static Set<PageRange> toPageRangeSet(String selection) throws ConversionException {
         if (isNotBlank(selection)) {
             Set<PageRange> pageRangeSet = new NullSafeSet<>();
-            String[] tokens = splitAndTrim(selection, ",");
+            String[] tokens = splitAndTrim(selection, ",");// split input list on comma
             for (String current : tokens) {
                 PageRange range = toPageRange(current);
                 if (range.getEnd() < range.getStart()) {
@@ -54,11 +58,44 @@ public final class ConversionUtils {
                 }
                 pageRangeSet.add(range);
             }
-            return pageRangeSet;
+            //Now that initial set of page ranges constructed, check to ensure no intersections exist
+            
+            return removeIntersections(pageRangeSet);
         }
         return Collections.emptySet();
     }
 
+    private static Set<PageRange> removeIntersections(Set<PageRange> ranges){
+    	SortedSet<Integer> allPages = new TreeSet<>();
+    	Set<PageRange> newRanges = new NullSafeSet<>();
+    	for (PageRange range : ranges) {
+    		for (int i = range.getStart(); i <= range.getEnd(); i++){
+    			allPages.add(i);
+    		}
+    	}
+    	//Now have a set that includes every page number specified by user
+    	//create all possible ranges from this set:
+    	Object[] sortedArr = allPages.toArray();
+    	Integer[] sorted = new Integer[sortedArr.length];
+    	for (int i =0; i < sortedArr.length; i++)
+            sorted[i] = (Integer)sortedArr[i];
+    	List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<Integer> curr = null;
+        for (int i = 0; i < sorted.length; i++) {
+            if(i == 0 || (sorted[i] != sorted[i-1]+1)) { 
+                //if the current element is the first element or doesn't satisfy the condition
+                curr = new ArrayList<Integer>(); //create a new list and set it to curr
+                result.add(curr); //add the newly created list to the result list
+            }
+        curr.add(sorted[i]); //add current element to the curr list
+        }
+    	for (List<Integer> subList : result) {
+    		newRanges.add(new PageRange(subList.get(0), subList.get(subList.size()-1)));
+    	}
+    	return newRanges;
+    }
+    
+    
     private static PageRange toPageRange(String value) throws ConversionException {
         String[] limits = splitAndTrim(value, "-");
         if (limits.length > 2) {

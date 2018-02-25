@@ -34,7 +34,7 @@ import org.sejda.model.toc.ToCPolicy;
  * Builder for {@link MergeParameters}
  * 
  * @author Andrea Vacondio
- *
+ *Invalid page ranges
  */
 class MergeParametersBuilder extends AbstractPdfOutputParametersBuilder<MergeParameters>
         implements SingleOutputTaskParametersBuilder<MergeParameters> {
