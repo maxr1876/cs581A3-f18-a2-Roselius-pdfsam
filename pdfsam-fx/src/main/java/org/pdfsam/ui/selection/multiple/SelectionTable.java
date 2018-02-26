@@ -135,11 +135,12 @@ public class SelectionTable extends TableView<SelectionTableRowData> implements 
             }
 
         });
+      
         placeHolder.getStyleClass().add("drag-drop-placeholder");
         placeHolder.setDisable(true);
         setPlaceholder(placeHolder);
         passwordPopup = new PasswordFieldPopup(this.ownerModule);
-
+        
         ContextMenu contextMenu = new ContextMenu();
         initTopSectionContextMenu(contextMenu, Arrays.stream(columns).anyMatch(PageRangesColumn.class::isInstance));
         initItemsSectionContextMenu(contextMenu, canDuplicateItems, canMove);

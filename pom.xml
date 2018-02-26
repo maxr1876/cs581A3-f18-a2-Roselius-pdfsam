@@ -9,12 +9,6 @@
 	<description>A free open source desktop application to split and merge pdf documents</description>
 	<url>http://www.pdfsam.org</url>
 
-	<scm>
-		<connection>scm:git:git@github.com:torakiki/pdfsam.git</connection>
-		<developerConnection>scm:git:git@github.com:torakiki/pdfsam.git</developerConnection>
-		<url>scm:git:git@github.com:torakiki/pdfsam.git</url>
-		<tag>HEAD</tag>
-	</scm>
 
 	<profiles>
 		<profile>

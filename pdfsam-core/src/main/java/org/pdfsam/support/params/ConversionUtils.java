@@ -21,6 +21,9 @@ package org.pdfsam.support.params;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.sejda.conversion.AdapterUtils.splitAndTrim;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,6 +95,7 @@ public final class ConversionUtils {
     	for (List<Integer> subList : result) {
     		newRanges.add(new PageRange(subList.get(0), subList.get(subList.size()-1)));
     	}
+   
     	return newRanges;
     }
     

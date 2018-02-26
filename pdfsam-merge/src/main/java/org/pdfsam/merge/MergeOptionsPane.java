@@ -60,7 +60,7 @@ class MergeOptionsPane extends VBox
     private ComboBox<KeyStringValueItem<ToCPolicy>> toc = new ComboBox<>();
 
     MergeOptionsPane() {
-        super(5);
+        super(5);//previously 5, change to 7 to see if new buttons show?
         I18nContext i18n = DefaultI18nContext.getInstance();
         blankIfOdd = new CheckBox(i18n.i18n("Add a blank page if page number is odd"));
         blankIfOdd.setGraphic(helpIcon(
