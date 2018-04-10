@@ -20,9 +20,12 @@ package org.pdfsam.ui;
 
 import static org.pdfsam.support.RequireUtils.requireNotNull;
 
+import java.util.Optional;
+import javafx.stage.Stage;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.pdfsam.WindowStatusController;
 
 /**
  * Holds data regarding the status of the main stage
@@ -140,4 +143,18 @@ public class StageStatus {
         return new EqualsBuilder().append(x, item.getX()).append(y, item.getY()).append(width, item.getWidth())
                 .append(height, item.getHeight()).append(mode, item.getMode()).isEquals();
     }
+
+	public void restore(Stage stage, WindowStatusController windowStatusController) {
+		stage.setX(getX());
+		stage.setY(getY());
+		stage.setWidth(getWidth());
+		stage.setHeight(getHeight());
+		if (windowStatusController.isNotMac()) {
+			getMode().restore(stage);
+		}
+	}
+
+	private boolean isNotMac() {
+		return !Optional.of(System.getProperty("os.name")).orElse("").toLowerCase().contains("mac");
+	}
 }

@@ -1,5 +1,4 @@
-/* 
- * This file is part of the PDF Split And Merge source code
+/* This file is part of the PDF Split And Merge source code
  * Created on 08/ott/2014
  * Copyright 2017 by Sober Lemur S.a.s. di Vacondio Andrea (info@pdfsam.org).
  *
@@ -38,7 +37,7 @@ import javafx.stage.Stage;
  * @author Andrea Vacondio
  *
  */
-@Auto
+public @Auto
 class WindowStatusController {
     private static final Logger LOG = LoggerFactory.getLogger(WindowStatusController.class);
     public static final String PDFSAM_DISABLE_UI_RESTORE = "org.pdfsam.disable.ui.restore";
@@ -60,7 +59,7 @@ class WindowStatusController {
         StageStatus latestStatus = service.getLatestStatus();
         if (!Boolean.getBoolean(PDFSAM_DISABLE_UI_RESTORE) && !StageStatus.NULL.equals(latestStatus)
                 && hasAvailableScreen(latestStatus)) {
-            restore(latestStatus);
+            latestStatus.restore(stage, this);
             LOG.trace("Stage status restored to {}", latestStatus);
         } else {
             defaultStageStatus();
@@ -76,18 +75,7 @@ class WindowStatusController {
 
     }
 
-    private void restore(StageStatus latestStatus) {
-        stage.setX(latestStatus.getX());
-        stage.setY(latestStatus.getY());
-        stage.setWidth(latestStatus.getWidth());
-        stage.setHeight(latestStatus.getHeight());
-
-        if (isNotMac()) {
-            latestStatus.getMode().restore(stage);
-        }
-    }
-
-    private boolean isNotMac() {
+    public boolean isNotMac() {
         return !Optional.of(System.getProperty("os.name")).orElse("").toLowerCase().contains("mac");
     }
 
