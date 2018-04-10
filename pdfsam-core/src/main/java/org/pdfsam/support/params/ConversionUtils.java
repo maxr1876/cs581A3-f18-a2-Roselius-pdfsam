@@ -78,10 +78,16 @@ public final class ConversionUtils {
     	}
     	//Now have a set that includes every page number specified by user
     	//create all possible ranges from this set:
+    	for (List<Integer> subList : createRanges(allPages)) {
+    		newRanges.add(new PageRange(subList.get(0), subList.get(subList.size()-1)));
+    	}
+   
+    	return newRanges;
+    }
+    
+    private static List<List<Integer>> createRanges(SortedSet<Integer> allPages){
     	Object[] sortedArr = allPages.toArray();
-    	Integer[] sorted = new Integer[sortedArr.length];
-    	for (int i =0; i < sortedArr.length; i++)
-            sorted[i] = (Integer)sortedArr[i];
+    	Integer[] sorted = convertToIntArr(sortedArr);
     	List<List<Integer>> result = new ArrayList<List<Integer>>();
         List<Integer> curr = null;
         for (int i = 0; i < sorted.length; i++) {
@@ -92,13 +98,16 @@ public final class ConversionUtils {
             }
         curr.add(sorted[i]); //add current element to the curr list
         }
-    	for (List<Integer> subList : result) {
-    		newRanges.add(new PageRange(subList.get(0), subList.get(subList.size()-1)));
-    	}
-   
-    	return newRanges;
+        return result;
     }
     
+   
+    private static Integer[] convertToIntArr(Object [] sortedArr) {
+    	Integer[] sorted = new Integer[sortedArr.length];
+    	for (int i =0; i < sortedArr.length; i++)
+            sorted[i] = (Integer)sortedArr[i];
+    	return sorted;
+    }
     
     private static PageRange toPageRange(String value) throws ConversionException {
         String[] limits = splitAndTrim(value, "-");
