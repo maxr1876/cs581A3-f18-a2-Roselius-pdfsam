@@ -35,15 +35,14 @@ import org.pdfsam.ui.selection.multiple.move.MoveType;
  */
 final class SelectionChangedEvent {
 
-    private int top = Integer.MAX_VALUE;
-    private int bottom = -1;
+    private Selection selection;
     private int totalRows = 0;
 
     private SelectionChangedEvent(Collection<? extends Integer> selected) {
         requireNotNull(selected, "Input selection cannot be null");
         selected.forEach(i -> {
-            bottom = Math.max(i, bottom);
-            top = Math.min(i, top);
+            selection.setBottom(Math.max(i, selection.getBottom()));
+            selection.setTop(Math.min(i, selection.getTop()));
         });
     }
 
@@ -55,14 +54,14 @@ final class SelectionChangedEvent {
      * @return true the selection has been cleared
      */
     public boolean isClearSelection() {
-        return top == Integer.MAX_VALUE && bottom == -1;
+        return selection.isClearSelection();
     }
 
     /**
      * @return true if its a single row selection event
      */
     public boolean isSingleSelection() {
-        return !isClearSelection() && top == bottom;
+        return selection.isSingleSelection();
     }
 
     /**
@@ -72,23 +71,11 @@ final class SelectionChangedEvent {
      */
     public int getSingleSelection() {
         requireState(isSingleSelection(), "Single selection expected");
-        return top;
+        return selection.getTop();
     }
 
     public boolean canMove(MoveType type) {
-        if (isClearSelection()) {
-            return false;
-        }
-        switch (type) {
-        case BOTTOM:
-            return isSingleSelection() && bottom < totalRows - 1;
-        case DOWN:
-            return bottom < totalRows - 1;
-        case TOP:
-            return isSingleSelection() && top > 0;
-        default:
-            return top > 0;
-        }
+        return selection.canMove(type, totalRows);
     }
 
     public int getTotalRows() {
