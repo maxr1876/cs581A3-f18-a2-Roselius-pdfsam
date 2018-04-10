@@ -1,5 +1,4 @@
-/* 
- * This file is part of the PDF Split And Merge source code
+/* This file is part of the PDF Split And Merge source code
  * Created on 13/giu/2013
  * Copyright 2017 by Sober Lemur S.a.s. di Vacondio Andrea (info@pdfsam.org).
  *
@@ -45,14 +44,14 @@ import org.sejda.model.pdf.PdfVersion;
  */
 public class PdfDocumentDescriptor {
 
-    private ObservableAtomicReference<PdfDescriptorLoadingStatus> loadingStatus = new ObservableAtomicReference<>(
+    private PdfDocumentDescriptorProduct pdfDocumentDescriptorProduct = new PdfDocumentDescriptorProduct();
+	private ObservableAtomicReference<PdfDescriptorLoadingStatus> loadingStatus = new ObservableAtomicReference<>(
             PdfDescriptorLoadingStatus.INITIAL);
     private AtomicInteger references = new AtomicInteger(1);
     private ObservableAtomicReference<Integer> pages = new ObservableAtomicReference<>(0);
     private String password;
     private File file;
     private PdfVersion version;
-    private Map<String, String> metadata = new HashMap<>();
     private SortedSet<Integer> validBookmarksLevels = Collections.emptySortedSet();
 
     private PdfDocumentDescriptor(File file, String password) {
@@ -74,16 +73,15 @@ public class PdfDocumentDescriptor {
      * @return the information dictionary value for the key or an empty string
      */
     public String getInformation(String key) {
-        return StringUtils.defaultString(metadata.get(key));
+        return pdfDocumentDescriptorProduct.getInformation(key);
     }
 
     public void setInformationDictionary(Map<String, String> info) {
-        metadata.clear();
-        metadata.putAll(info);
+        pdfDocumentDescriptorProduct.setInformationDictionary(info);
     }
 
     public void putInformation(String key, String value) {
-        metadata.put(key, value);
+        pdfDocumentDescriptorProduct.putInformation(key, value);
     }
 
     public void pages(int newValue) {
